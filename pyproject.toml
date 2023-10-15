@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pigpiod_emulator"
+authors = [
+	{name = "Clément Ramirez", email = "ramirez.clement3@gmail.com"}
+]
+description = "Python-based emulator for the pigpiod daemon"
+readme = "README.md"
+version = "0.0.1"
+
+[tool.setuptools]
+include-package-data = true
+
+#[project.scripts]
+#pigpiod_emulator_gui = "tools.pigpiod_emulator_gui:main"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
