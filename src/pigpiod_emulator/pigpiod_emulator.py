@@ -4,6 +4,8 @@ import logging
 import socket
 
 from .virtual_hardware import VirtualHardware
+from .client_instances import PigpioClient
+
 
 class PigpiodEmulator(threading.Thread):
     """

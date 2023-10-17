@@ -1,9 +1,8 @@
 import sys
 import curses
 import logging
-import time
 
-from pigpiod_emulator import *
+from pigpiod_emulator import VirtualHardware, PigpiodEmulator
 
 
 class Window:
@@ -346,6 +345,6 @@ if __name__ == "__main__":
     virtual_hardware.add_serialport('/dev/ttyUSBMotorCard', 115200)
 
     pigpiodemulator = PigpiodEmulator(virtual_hardware)
-
+    pigpiodemulator.start()
     pigpiod_gui = PigpiodEmulatorGUI()
     pigpiod_gui.start()

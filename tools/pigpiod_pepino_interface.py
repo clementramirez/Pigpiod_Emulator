@@ -1,8 +1,10 @@
 import socket
 import threading
-from pigpiod_emulator import *
 import logging
 import time
+
+from pigpiod_emulator import VirtualHardware, PigpiodEmulator
+
 
 class user_card_recv_Thread(threading.Thread):
     def __init__(self, user_card, pigpiod):
@@ -41,7 +43,7 @@ if __name__ == '__main__':
 
     # Start the pigpio daemon emulator with the virtual hardware
     pigpiod = PigpiodEmulator(virtual_hardware)
-
+    pigpiod.start()
     # Connect the 2 Pepino's servers
     # user_card = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # user_card.connect(('192.168.0.45', 5000))
