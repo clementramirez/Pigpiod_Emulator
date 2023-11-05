@@ -19,6 +19,7 @@ class user_card_recv_Thread(threading.Thread):
             if data:
                 self.pigpiod.virtual_hardware.serialports[0].put_input(data)
 
+
 class motor_card_recv_Thread(threading.Thread):
     def __init__(self, motor_card, pigpiod):
         threading.Thread.__init__(self)
@@ -31,6 +32,7 @@ class motor_card_recv_Thread(threading.Thread):
             #print('data', data)
             if data:
                 self.pigpiod.virtual_hardware.serialports[1].put_input(data)
+
 
 if __name__ == '__main__':
     # Configure the logger
@@ -45,8 +47,8 @@ if __name__ == '__main__':
     pigpiod = PigpiodEmulator(virtual_hardware)
     pigpiod.start()
     # Connect the 2 Pepino's servers
-    # user_card = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # user_card.connect(('192.168.0.45', 5000))
+    user_card = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    user_card.connect(('localhost', 5001))
 
     motor_card = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     motor_card.connect(('localhost', 5000))
@@ -54,7 +56,7 @@ if __name__ == '__main__':
     print('Connected !')
 
     # Start the threads that will receive the data from the Pepino's servers
-    # user_card_recv_Thread(user_card, pigpiod).start()
+    user_card_recv_Thread(user_card, pigpiod).start()
     motor_card_recv_Thread(motor_card, pigpiod).start()
 
     # Check if there is any data to send to the Pepino's servers
@@ -62,12 +64,11 @@ if __name__ == '__main__':
     motor_card_read_index = 0
 
     while True:
-        # user_data_nb = pigpiod.virtual_hardware.serialports[0].data_available_out(user_card_read_index)
-        # if user_data_nb > 0:
-        #     data = pigpiod.virtual_hardware.serialports[0].get_output(user_data_nb, user_card_read_index)
-        #     user_card.send(data)
-        #     user_card_read_index += user_data_nb
-        #     print('data sent', data)
+        user_data_nb = pigpiod.virtual_hardware.serialports[0].output_dat_avail(user_card_read_index)
+        if user_data_nb > 0:
+            data, user_card_read_index = pigpiod.virtual_hardware.serialports[0].get_output(user_data_nb, user_card_read_index)
+            print('data sent', data)
+            user_card.send(data)
 
         motor_data_nb = pigpiod.virtual_hardware.serialports[1].output_dat_avail(motor_card_read_index)
         if motor_data_nb > 0:
